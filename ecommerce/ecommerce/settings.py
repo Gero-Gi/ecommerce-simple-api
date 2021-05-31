@@ -32,6 +32,8 @@ AUTH_USER_MODEL = "auth_app.User"
 
 INSTALLED_APPS = [
     'auth_app',
+    'catalog',
+
 
     # pip
     'rest_framework',
