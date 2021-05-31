@@ -2,7 +2,10 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.response import Response
-
+from rest_framework.views import APIView
+from rest_framework.generics import CreateAPIView
+from .serializers import UserSerializer
+from .models import User
 
 
 class GetTokenView(ObtainAuthToken):
@@ -20,3 +23,10 @@ class GetTokenView(ObtainAuthToken):
              'last_name': user.last_name,
              'email': user.email,
              })
+
+
+class SignupView(CreateAPIView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()
+    http_method_names = ['post']
+    
