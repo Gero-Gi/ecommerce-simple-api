@@ -1,6 +1,51 @@
-from rest_framework.test import APITestCase
+from django.test import client
+from rest_framework.test import APITestCase, APIClient
 from django.urls import reverse
 from catalog import models
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import get_user_model
+USER = get_user_model()
+
+
+
+
+class APITestMixin():
+    def get_admin_user(self):
+        admin = USER.objects.create(
+            first_name='admin',
+            last_name='admin',
+            email='admin@admin.com',
+            is_superuser=True,
+        )
+        admin.set_password('adminpass')
+        admin.save()
+        return admin
+
+    def get_user():
+        user = USER.objects.create(
+            first_name='John',
+            last_name='Doe',
+            email='john@gmail.com',
+            is_superuser=False,
+        )
+        user.set_password('password')
+        user.save()
+        return user
+
+
+    def token_authentication(self, user):
+        token, created = Token.objects.get_or_create(user=user)
+
+        self.client = APIClient()
+        self.client.force_authenticate(user=user, token=token)
+        self.authorization = 'Token {}'.format(token.key)
+        self.client.credentials = {'Authorization': self.authorization}
+
+
+
+    
+
+
 
 
 class CatalogTestMixin():
@@ -24,8 +69,19 @@ class CatalogTestMixin():
 
         return test_product
 
+    def get_admin(self):
+        admin = USER.objects.create(
+            first_name='admin',
+            last_name='admin',
+            email='admin@admin.com',
+            is_superuser=True,
+        )
+        admin.set_password('adminpass')
+        admin.save()
+        return admin
 
-class ProductTestSetup(CatalogTestMixin, APITestCase):
+
+class ProductTestSetup(CatalogTestMixin, APITestMixin, APITestCase):
 
     def setUp(self):
         self.url = reverse('product-list')
@@ -44,8 +100,12 @@ class ProductTestSetup(CatalogTestMixin, APITestCase):
             'description': 'description_updated',
         }
 
+        self.token_authentication(self.get_admin_user())
+        
 
-class VariantTestSetup(CatalogTestMixin, APITestCase):
+
+
+class VariantTestSetup(CatalogTestMixin, APITestMixin, APITestCase):
 
     def setUp(self):
         self.url = reverse('variant-list')
@@ -56,13 +116,14 @@ class VariantTestSetup(CatalogTestMixin, APITestCase):
             'quantity': 100,
         }
 
+        self.token_authentication(self.get_admin_user())
 
-class CategoryTestSetUp(CatalogTestMixin, APITestCase):
+
+class CategoryTestSetUp(CatalogTestMixin, APITestMixin, APITestCase):
 
     def setUp(self):
         self.url = reverse('category-list')
 
-        
         self.test_product = self.get_test_product()
 
         self.json_post_data = {
@@ -74,3 +135,9 @@ class CategoryTestSetUp(CatalogTestMixin, APITestCase):
             'name': 'category_modified',
             'products': [-self.test_product.id]
         }
+
+        self.token_authentication(self.get_admin_user())
+
+
+        
+

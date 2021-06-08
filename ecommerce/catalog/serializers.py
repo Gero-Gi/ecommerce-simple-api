@@ -34,7 +34,7 @@ class VariantSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Variant
-        exclude = ['product', 'sku']
+        fields = '__all__'
         read_only_fields = ['product', 'sku']
 
 

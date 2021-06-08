@@ -5,7 +5,7 @@ from .models import Variant, Product
 # genera identificatore, univoco, per le varianti
 @receiver(pre_save, sender=Variant)
 def generate_sku(sender, instance, **kwargs):
-    sender.sku = '{}-{}'.format(instance.product.name, instance.size)
+    instance.sku = '{}-{}'.format(instance.product.name, instance.size)
 
 # crea le varianti di un prodotto dopo che questo è stato creato
 @receiver(post_save, sender=Product)

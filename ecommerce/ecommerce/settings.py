@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-!6rj)@h-4il91us-j79l)!y)z#3x!z^#nh$jgax&h)zp=stbbc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.29', '127.0.0.1']
 
 AUTH_USER_MODEL = "auth_app.User" 
 # Application definition
@@ -33,11 +33,14 @@ AUTH_USER_MODEL = "auth_app.User"
 INSTALLED_APPS = [
     'auth_app',
     'catalog',
+    'ecom',
 
 
     # pip
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
+    'corsheaders',
     
     # django
     'django.contrib.admin',
@@ -56,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'ecommerce.urls'
@@ -111,11 +115,15 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/

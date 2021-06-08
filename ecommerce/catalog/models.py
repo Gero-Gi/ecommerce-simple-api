@@ -49,7 +49,7 @@ class Variant(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
-    products = models.ManyToManyField(Product, blank=True, null=True)
+    products = models.ManyToManyField(Product, blank=True)
 
     def __str__(self):
         return self.name

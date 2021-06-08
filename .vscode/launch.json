@@ -10,7 +10,8 @@
             "request": "launch",
             "program": "${workspaceFolder}/ecommerce/manage.py",
             "args": [
-                "runserver"
+                "runserver",
+                "192.168.1.29:8000",
             ],
             "django": true
         }
