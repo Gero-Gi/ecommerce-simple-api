@@ -2,9 +2,11 @@ from django.db.models import fields
 from rest_framework import serializers
 from . import models
 from catalog import models as catalog
+from catalog import serializers as catalog_serializers
 
 class ItemSerializer(serializers.ModelSerializer):
-    variant = serializers.PrimaryKeyRelatedField(queryset=catalog.Variant.objects.all())
+    variant = catalog_serializers.VariantSerializerDetail()
+    price = serializers.SerializerMethodField()
     class Meta:
         model = models.Item
         fields = '__all__'
@@ -17,6 +19,10 @@ class ItemSerializer(serializers.ModelSerializer):
         instance.cart = models.Cart.objects.get(user=user)
         instance.save()
         return instance
+
+    @staticmethod
+    def get_price(obj):
+        return obj.price
 
 
 class AddressSerializer(serializers.ModelSerializer):

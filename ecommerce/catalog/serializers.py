@@ -38,6 +38,14 @@ class VariantSerializer(serializers.ModelSerializer):
         read_only_fields = ['product', 'sku']
 
 
+class VariantSerializerDetail(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Variant
+        exclude = ['quantity']
+        depth = 2
+
+
 class CategorySerializer(serializers.ModelSerializer):
     # products = serializers.PrimaryKeyRelatedField(queryset=models.Product.objects.all(), many=True)
     # products = serializers.PrimaryKeyRelatedField(queryset=models.Product.objects.all(), many=True)

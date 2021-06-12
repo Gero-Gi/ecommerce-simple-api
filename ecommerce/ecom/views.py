@@ -57,6 +57,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 class AddressViewSet(viewsets.ModelViewSet):
     queryset = models.Address.objects.all()
     permission_classes = [permissions.AdminOrOwner]
+    serializer_class = serializers.AddressSerializer
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
