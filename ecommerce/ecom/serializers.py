@@ -46,6 +46,14 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['is_shipped', 'items']
 
+    def create(self, validated_data):
+        instance = super().create(validated_data)
+        user = self.context.get('user', None)
+        instance.cart = user
+        instance.save()
+        return instance
+
+
     
 
 class OrderSerializeAdmin(serializers.ModelSerializer):
