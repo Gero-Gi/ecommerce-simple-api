@@ -10,6 +10,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = serializers.ItemSerializer
     permission_classes = [permissions.ItemPermission]
+    filter_backends = [DjangoFilterBackend]
+
+    # filtri url
+    filterset_fields = ['is_active']
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
