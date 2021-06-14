@@ -15,6 +15,10 @@ class ItemViewSet(viewsets.ModelViewSet):
     # filtri url
     filterset_fields = ['is_active']
 
+    def get_serializer_class(self):
+        if self.request.method == 'GET': return serializers.ItemSerializerDetail
+        return serializers.ItemSerializer
+
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context['user'] = self.request.user
@@ -25,6 +29,7 @@ class ItemViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = models.Item.objects.filter(cart__user=user)
         return queryset
+
 
 
 class OrderViewSet(viewsets.ModelViewSet):
